@@ -15,4 +15,12 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'ProductController@index')->name('product.index');
+// Route::get('/', 'ProductController@index')->name('product.index');
+
+// // idに紐づけるルーティング
+// Route::get('/product/{id}', 'ProductController@show')->name('product.show');
+
+Route::name('product')->group(function() {
+  Route::get('/', 'ProductController@index')->name('index');
+  Route::get('/product/{id}', 'ProductController@show')->name('show');
+});
