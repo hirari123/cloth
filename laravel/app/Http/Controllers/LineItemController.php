@@ -28,4 +28,13 @@ class LineItemController extends Controller
 
         return redirect(route('cart.index'));
     }
+
+    public function delete(Request $request)
+    {
+        // レコードの削除
+        LineItem::destroy($request->input('id'));
+
+        // レコード削除後、カート画面へリダイレクトして画面を更新する
+        return redirect(route('cart.index'));
+    }
 }
