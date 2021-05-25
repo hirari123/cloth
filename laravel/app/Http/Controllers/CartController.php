@@ -34,6 +34,11 @@ class CartController extends Controller
         // 取得したカートIDでcartsテーブルのレコードを検索
         $cart = Cart::find($cart_id);
 
+        // countメソッドで配列の要素数を取得し、0の場合はカート画面へ遷移する
+        if (count($cart->products) <= 0) {
+            return redirect(route('cart.index'));
+        }
+
         // Stripe Checkoutへ渡す購入商品のリストを作成
         $line_items = [];
         foreach($cart->products as $product) {
