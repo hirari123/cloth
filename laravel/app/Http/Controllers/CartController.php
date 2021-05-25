@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Cart;
+use App\Models\LineItem;
 
 class CartController extends Controller
 {
@@ -55,7 +56,7 @@ class CartController extends Controller
             // 購入商品のセット
             'line_items' => [$line_items],
             // 決済成功時のリダイレクトURL
-            'success_url' => route('product.index'),
+            'success_url' => route('cart.success'),
             // 決済失敗時のリダイレクトURL
             'cancel_url' => route('cart.index'),
         ]);
@@ -64,5 +65,16 @@ class CartController extends Controller
             'session' => $session,
             'publicKey' => env('STRIPE_PUBLIC_KEY')
         ]);
+    }
+
+    public function success()
+    {
+        // セッションからカートIDを取得
+        $cart_id = Session::get('cart');
+        // line_itemsテーブルからカートIDで検索
+        LineItem::where('cart_id', $cart_id)->delete();
+
+        // 商品一覧画面へリダイレクト
+        return redirect(route('product.index'));
     }
 }
